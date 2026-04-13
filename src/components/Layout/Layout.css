@@ -1,0 +1,18 @@
+/* ============================
+   Layout — Top Navbar Version
+   ============================ */
+
+.layout {
+  min-height: 100vh;
+  background: var(--bg-primary);
+}
+
+.layout-content {
+  padding-top: calc(var(--navbar-height) + var(--space-xl));
+  padding-left: var(--space-xl);
+  padding-right: var(--space-xl);
+  padding-bottom: var(--space-xl);
+  max-width: 1280px;
+  margin: 0 auto;
+  min-height: 100vh;
+}

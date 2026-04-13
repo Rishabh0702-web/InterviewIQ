@@ -1,0 +1,352 @@
+/* ============================
+   Home Page — Premium Bento Box Redesign
+   ============================ */
+
+   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+   .home {
+     display: flex;
+     flex-direction: column;
+     gap: 60px;
+     animation: fadeIn 0.5s ease-out;
+     font-family: 'Plus Jakarta Sans', sans-serif;
+     padding: 40px 20px 100px;
+     max-width: 1200px;
+     margin: 0 auto;
+     color: #111827;
+   }
+   
+   /* ── BENTO HERO GRID ───────────────── */
+   .bento-hero {
+     display: grid;
+     grid-template-columns: 1fr 1fr;
+     grid-auto-rows: minmax(140px, auto);
+     gap: 24px;
+     width: 100%;
+   }
+   
+   .bento-card {
+     background: #ffffff;
+     border: 1px solid #eaeaea;
+     border-radius: 28px;
+     padding: 40px;
+     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03);
+     display: flex;
+     flex-direction: column;
+     justify-content: center;
+     position: relative;
+     overflow: hidden;
+     transition: transform 0.3s ease, box-shadow 0.3s ease;
+   }
+   
+   .bento-card:hover {
+     transform: translateY(-2px);
+     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+   }
+   
+   /* Main Hero Block (Spans 2 rows on left) */
+   .bento-main {
+     grid-column: 1 / 2;
+     grid-row: 1 / 4;
+     background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+     justify-content: flex-start;
+   }
+   
+   .hero-badge {
+     display: inline-flex;
+     align-items: center;
+     gap: 8px;
+     padding: 8px 16px;
+     border-radius: 20px;
+     background: rgba(176, 6, 21, 0.06);
+     border: 1px solid rgba(176, 6, 21, 0.15);
+     font-size: 0.85rem;
+     font-weight: 700;
+     color: #b00615;
+     margin-bottom: 30px;
+     width: fit-content;
+   }
+   
+   .hero-badge .dot {
+     width: 8px;
+     height: 8px;
+     border-radius: 50%;
+     background: #b00615;
+     animation: pulse 2s infinite;
+   }
+   
+   .bento-main h1 {
+     font-size: 4.5rem;
+     font-weight: 800;
+     line-height: 1.05;
+     color: #111827;
+     letter-spacing: -0.04em;
+     margin-bottom: 24px;
+   }
+   
+   .bento-main h1 .highlight {
+     color: #b00615; /* signature red */
+   }
+   
+   .bento-main p {
+     font-size: 1.25rem;
+     color: #4b5563;
+     line-height: 1.6;
+     margin-bottom: 40px;
+     max-width: 90%;
+   }
+   
+   /* CTA Buttons */
+   .bento-actions {
+     display: flex;
+     gap: 16px;
+     margin-top: auto;
+   }
+   
+   .bento-btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     gap: 10px;
+     padding: 16px 28px;
+     border-radius: 16px;
+     font-size: 1.1rem;
+     font-weight: 600;
+     cursor: pointer;
+     transition: all 0.2s ease;
+     border: none;
+   }
+   
+   .btn-primary-bento {
+     background: #10b981; /* Emerald green */
+     color: white;
+     box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+   }
+   
+   .btn-primary-bento:hover {
+     background: #059669;
+     transform: scale(1.02);
+   }
+   
+   .btn-secondary-bento {
+     background: white;
+     color: #111827;
+     border: 2px solid #e5e7eb;
+   }
+   
+   .btn-secondary-bento:hover {
+     border-color: #d1d5db;
+     background: #f9fafb;
+     transform: scale(1.02);
+   }
+   
+   /* Stat Cards (Right side grid) */
+   .bento-stat {
+     align-items: flex-start;
+     justify-content: center;
+     background: #ffffff;
+   }
+   
+   .bento-stat .icon-wrapper {
+     width: 48px;
+     height: 48px;
+     border-radius: 12px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     margin-bottom: 16px;
+   }
+   
+   .stat-red .icon-wrapper { background: #fee2e2; color: #ef4444; }
+   .stat-green .icon-wrapper { background: #d1fae5; color: #10b981; }
+   .stat-orange .icon-wrapper { background: #fef3c7; color: #f59e0b; }
+   
+   .bento-stat h3 {
+     font-size: 2.5rem;
+     font-weight: 800;
+     color: #111827;
+     margin: 0 0 4px 0;
+     line-height: 1;
+   }
+   
+   .bento-stat p {
+     font-size: 0.95rem;
+     color: #6b7280;
+     font-weight: 600;
+     text-transform: uppercase;
+     letter-spacing: 0.05em;
+     margin: 0;
+   }
+   
+   /* ── BENTO FEATURES GRID ───────────────── */
+   .section-title {
+     font-size: 2.5rem;
+     font-weight: 800;
+     letter-spacing: -0.03em;
+     color: #111827;
+     margin-top: 60px;
+     margin-bottom: 12px;
+   }
+   .section-subtitle {
+     font-size: 1.15rem;
+     color: #6b7280;
+     margin-bottom: 40px;
+   }
+   
+   .bento-features {
+     display: grid;
+     grid-template-columns: 1fr 1fr 1fr;
+     gap: 24px;
+   }
+   
+   .bento-feature-card {
+     background: #ffffff;
+     border: 1px solid #eaeaea;
+     border-radius: 24px;
+     padding: 32px;
+     display: flex;
+     flex-direction: column;
+     cursor: pointer;
+     transition: all 0.3s ease;
+   }
+   .bento-feature-card:hover {
+     border-color: #b00615;
+     box-shadow: 0 10px 40px rgba(176, 6, 21, 0.08);
+     transform: translateY(-4px);
+   }
+   
+   .feature-ill {
+     background: #fafafa;
+     border-radius: 16px;
+     height: 140px;
+     margin-bottom: 24px;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     justify-content: center;
+     border: 1px solid #f3f4f6;
+     color: #b00615;
+   }
+   .bento-feature-card:nth-child(2) .feature-ill { color: #10b981; }
+   .bento-feature-card:nth-child(3) .feature-ill { color: #3b82f6; }
+   
+   .bento-feature-card h3 {
+     font-size: 1.5rem;
+     font-weight: 700;
+     margin-bottom: 12px;
+     color: #111827;
+   }
+   
+   .bento-feature-card p {
+     font-size: 1rem;
+     color: #4b5563;
+     line-height: 1.6;
+     margin-bottom: 24px;
+     flex-grow: 1;
+   }
+   
+   .tags {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 8px;
+   }
+   .tag {
+     padding: 4px 12px;
+     background: #f3f4f6;
+     border-radius: 100px;
+     font-size: 0.8rem;
+     font-weight: 600;
+     color: #4b5563;
+   }
+   
+   /* ── BENTO TIMELINE ───────────────── */
+   .bento-pipeline {
+     background: #111827; /* Dark elegant section */
+     border-radius: 32px;
+     padding: 60px;
+     color: white;
+     text-align: center;
+     margin-top: 40px;
+   }
+   
+   .bento-pipeline h2 {
+     font-size: 2.5rem;
+     font-weight: 800;
+     letter-spacing: -0.03em;
+     margin-bottom: 60px;
+     color: white;
+   }
+   
+   .timeline-grid {
+     display: flex;
+     justify-content: space-between;
+     position: relative;
+   }
+   
+   .timeline-grid::before {
+     content: '';
+     position: absolute;
+     top: 24px;
+     left: 40px;
+     right: 40px;
+     height: 2px;
+     background: rgba(255,255,255,0.1);
+     z-index: 1;
+   }
+   
+   .timeline-step {
+     position: relative;
+     z-index: 2;
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     width: 140px;
+   }
+   
+   .timeline-dot {
+     width: 50px;
+     height: 50px;
+     background: #1f2937;
+     border: 2px solid #374151;
+     border-radius: 50%;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 1.25rem;
+     font-weight: 800;
+     margin-bottom: 20px;
+     transition: all 0.3s ease;
+   }
+   
+   .timeline-step:hover .timeline-dot {
+     background: #b00615;
+     border-color: #ef4444;
+     transform: scale(1.1);
+   }
+   
+   .timeline-step h4 {
+     font-size: 1.1rem;
+     font-weight: 700;
+     margin-bottom: 8px;
+     color: white;
+   }
+   
+   .timeline-step p {
+     font-size: 0.85rem;
+     color: #9ca3af;
+     line-height: 1.5;
+   }
+   
+   @keyframes pulse {
+     0% { box-shadow: 0 0 0 0 rgba(176, 6, 21, 0.4); }
+     70% { box-shadow: 0 0 0 6px rgba(176, 6, 21, 0); }
+     100% { box-shadow: 0 0 0 0 rgba(176, 6, 21, 0); }
+   }
+   
+   @media (max-width: 1024px) {
+     .bento-hero { grid-template-columns: 1fr; }
+     .bento-main { grid-column: 1; grid-row: 1; }
+     .bento-features { grid-template-columns: 1fr; }
+     .timeline-grid { flex-direction: column; align-items: center; gap: 40px; }
+     .timeline-grid::before { display: none; }
+   }

@@ -1,0 +1,198 @@
+/**
+ * Session storage utilities for tracking interview progress across sessions.
+ */
+
+const STORAGE_KEY = 'interviewiq_sessions';
+
+export function saveSession(sessionData) {
+  const sessions = getSessions();
+  const session = {
+    id: Date.now().toString(),
+    date: new Date().toISOString(),
+    ...sessionData,
+  };
+  sessions.push(session);
+  // Keep last 20 sessions
+  const trimmed = sessions.slice(-20);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(trimmed));
+  return session;
+}
+
+export function getSessions() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    return data ? JSON.parse(data) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function getLatestSession() {
+  const sessions = getSessions();
+  return sessions.length > 0 ? sessions[sessions.length - 1] : null;
+}
+
+export function clearSessions() {
+  localStorage.removeItem(STORAGE_KEY);
+}
+
+export function deleteSession(id) {
+  const sessions = getSessions().filter((s) => s.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+}
+
+export function getSessionById(id) {
+  const sessions = getSessions();
+  return sessions.find((s) => s.id === id) || null;
+}
+
+/**
+ * Generate PDF report using jsPDF.
+ */
+export async function generatePDFReport(report) {
+  const { jsPDF } = await import('jspdf');
+  const doc = new jsPDF();
+  
+  const pageWidth = doc.internal.pageSize.getWidth();
+  let y = 20;
+
+  // Title
+  doc.setFontSize(22);
+  doc.setTextColor(124, 58, 237);
+  doc.text('InterviewIQ', pageWidth / 2, y, { align: 'center' });
+  y += 8;
+  doc.setFontSize(12);
+  doc.setTextColor(100);
+  doc.text('Interview Performance Report', pageWidth / 2, y, { align: 'center' });
+  y += 5;
+  doc.setFontSize(9);
+  doc.text(new Date().toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }), pageWidth / 2, y, { align: 'center' });
+  y += 12;
+
+  // Line separator
+  doc.setDrawColor(124, 58, 237);
+  doc.setLineWidth(0.5);
+  doc.line(20, y, pageWidth - 20, y);
+  y += 10;
+
+  // Overall Score
+  doc.setFontSize(16);
+  doc.setTextColor(30);
+  doc.text(`Overall Score: ${report.overallScore}/100`, 20, y);
+  y += 10;
+
+  // Summary
+  doc.setFontSize(10);
+  doc.setTextColor(60);
+  const summaryLines = doc.splitTextToSize(report.summary || '', pageWidth - 40);
+  doc.text(summaryLines, 20, y);
+  y += summaryLines.length * 5 + 8;
+
+  // Category Scores
+  doc.setFontSize(14);
+  doc.setTextColor(30);
+  doc.text('Category Scores', 20, y);
+  y += 8;
+  doc.setFontSize(10);
+  doc.setTextColor(60);
+  if (report.categoryScores) {
+    Object.entries(report.categoryScores).forEach(([key, value]) => {
+      const label = key.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+      doc.text(`${label}: ${value}/100`, 25, y);
+      y += 6;
+    });
+  }
+  y += 6;
+
+  // Strengths
+  doc.setFontSize(14);
+  doc.setTextColor(16, 185, 129);
+  doc.text('Strengths', 20, y);
+  y += 8;
+  doc.setFontSize(10);
+  doc.setTextColor(60);
+  (report.strengths || []).forEach((s) => {
+    doc.setFont(undefined, 'bold');
+    doc.text(`• ${s.title}`, 25, y);
+    y += 5;
+    doc.setFont(undefined, 'normal');
+    const detailLines = doc.splitTextToSize(s.detail, pageWidth - 50);
+    doc.text(detailLines, 30, y);
+    y += detailLines.length * 5 + 3;
+  });
+  y += 4;
+
+  // Weaknesses
+  doc.setFontSize(14);
+  doc.setTextColor(239, 68, 68);
+  doc.text('Areas for Improvement', 20, y);
+  y += 8;
+  doc.setFontSize(10);
+  doc.setTextColor(60);
+  (report.weaknesses || []).forEach((w) => {
+    doc.setFont(undefined, 'bold');
+    doc.text(`• ${w.title}`, 25, y);
+    y += 5;
+    doc.setFont(undefined, 'normal');
+    const detailLines = doc.splitTextToSize(w.detail, pageWidth - 50);
+    doc.text(detailLines, 30, y);
+    y += detailLines.length * 5 + 3;
+  });
+  y += 4;
+
+  // Check if need new page
+  if (y > 240) {
+    doc.addPage();
+    y = 20;
+  }
+
+  // Action Items
+  doc.setFontSize(14);
+  doc.setTextColor(124, 58, 237);
+  doc.text('Action Items', 20, y);
+  y += 8;
+  doc.setFontSize(10);
+  doc.setTextColor(60);
+  (report.actionItems || []).forEach((item, i) => {
+    const lines = doc.splitTextToSize(`${i + 1}. ${item}`, pageWidth - 45);
+    doc.text(lines, 25, y);
+    y += lines.length * 5 + 2;
+  });
+  y += 6;
+
+  if (y > 220) {
+    doc.addPage();
+    y = 20;
+  }
+
+  // 7 Day Plan
+  doc.setFontSize(14);
+  doc.setTextColor(6, 182, 212);
+  doc.text('7-Day Improvement Plan', 20, y);
+  y += 8;
+  doc.setFontSize(10);
+  (report.sevenDayPlan || []).forEach((day) => {
+    if (y > 265) {
+      doc.addPage();
+      y = 20;
+    }
+    doc.setTextColor(30);
+    doc.setFont(undefined, 'bold');
+    doc.text(`Day ${day.day}: ${day.focus}`, 25, y);
+    y += 5;
+    doc.setFont(undefined, 'normal');
+    doc.setTextColor(60);
+    (day.tasks || []).forEach((task) => {
+      doc.text(`  → ${task}`, 30, y);
+      y += 5;
+    });
+    y += 3;
+  });
+
+  // Footer
+  doc.setFontSize(8);
+  doc.setTextColor(150);
+  doc.text('Generated by InterviewIQ — AI Interview Coach', pageWidth / 2, doc.internal.pageSize.getHeight() - 10, { align: 'center' });
+
+  doc.save('InterviewIQ_Report.pdf');
+}
